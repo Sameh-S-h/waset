@@ -1,0 +1,80 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-md-8 position-relative">
+
+        <div class="card shadow-lg">
+            <div class="card-header bg-danger text-white">
+                <h4 class="mb-0">
+                    <i class="fas fa-plus-circle"></i> Add New Offer
+                </h4>
+            </div>
+
+            <div class="card-body p-4">
+                <form method="POST">
+
+                    <div class="mb-3">
+                        <label class="form-label">Product Title</label>
+                        <input type="text" name="title" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Image URL</label>
+                        <input type="url" name="image_url" class="form-control">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Description</label>
+                        <textarea name="description" class="form-control" rows="4"></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Price</label>
+                        <input type="number" step="0.01" name="price" class="form-control" required>
+                    </div>
+
+                    <div id="auction-duration" class="mb-3" style="display:none;">
+                        <label class="form-label">Auction Duration</label>
+                        <select name="auction_hours" class="form-control">
+                            <option value="1">1 hour</option>
+                            <option value="3">3 hours</option>
+                            <option value="6">6 hours</option>
+                            <option value="12">12 hours</option>
+                            <option value="24">24 hours</option>
+                        </select>
+                    </div>
+
+                    <hr class="my-4 border-secondary">
+
+                    <div class="d-grid gap-2 text-center">
+                        <button type="submit"
+                                name="type"
+                                value="Direct"
+                                class="btn btn-outline-success btn-lg">
+                            <i class="fas fa-money-bill-wave"></i> Direct Sale
+                        </button>
+
+                        <button type="submit"
+                                name="type"
+                                value="Auction"
+                                onclick="showAuction()"
+                                class="btn btn-outline-warning btn-lg">
+                            <i class="fas fa-gavel"></i> Auction
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+function showAuction() {
+    document.getElementById("auction-duration").style.display = "block";
+}
+</script>
+
+{% endblock %}

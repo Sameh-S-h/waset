@@ -1,0 +1,133 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+
+    <div class="col-md-6 mb-4">
+        <div class="card shadow border-0">
+            <img
+                src="{{ listing.image_url or 'https://via.placeholder.com/600x400?text=No+Image' }}"
+                class="img-fluid rounded"
+                alt="{{ listing.title }}"
+            >
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <h2 class="fw-bold text-white mb-2">{{ listing.title }}</h2>
+
+        <div class="mb-3">
+            <span class="badge {{ 'bg-success' if listing.listing_type == 'Direct' else 'bg-warning text-dark' }}">
+                {{ listing.listing_type }} Sale
+            </span>
+            <span class="text-muted ms-2">
+                <i class="fas fa-clock"></i>
+                {{ listing.created_at }}
+            </span>
+        </div>
+
+        <h1 class="text-danger fw-bold mb-4">
+            {{ listing.price }} <small class="fs-5 text-muted">EGP</small>
+        </h1>
+
+        {% if listing.listing_type == 'Auction' %}
+        <div class="card bg-dark border-warning mb-4">
+            <div class="card-body">
+                <h5 class="text-warning mb-3">
+                    <i class="fas fa-gavel"></i> Auction Details
+                </h5>
+
+                <p class="text-light">
+                    Initial Price:
+                    <strong>{{ listing.price }} EGP</strong>
+                </p>
+
+                <p class="text-light">
+                    Highest Bid:
+                    <strong>{{ highest_bid }} EGP</strong>
+                </p>
+
+                <p class="text-light">
+                    Status:
+                    <span class="badge {{ 'bg-success' if auction_status == 'Running' else 'bg-danger' }}">
+                        {{ auction_status }}
+                    </span>
+                </p>
+
+                {% if auction_status == 'Running' %}
+                <form method="POST" action="{{ url_for('listing.place_bid', listing_id=listing.id) }}">
+                    <div class="mb-3">
+                        <label class="form-label text-light">Your Bid</label>
+                        <input
+                            type="number"
+                            step="0.01"
+                            name="bid_amount"
+                            class="form-control"
+                            required
+                        >
+                    </div>
+
+                    <button type="submit" class="btn btn-warning w-100">
+                        Place Bid
+                    </button>
+                </form>
+                {% else %}
+                <div class="alert alert-danger mt-3">
+                    Auction has ended
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="card bg-dark border-secondary mb-4">
+            <div class="card-body">
+                <h5 class="card-title text-white border-bottom border-secondary pb-2">
+                    Description
+                </h5>
+                <p class="card-text text-light">
+                    {{ listing.description }}
+                </p>
+            </div>
+        </div>
+
+        <div class="card border-danger mb-4" style="background-color:#1a1a1a;">
+            <div class="card-header bg-danger text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-store"></i> Seller Information
+                </h5>
+            </div>
+
+            <div class="card-body">
+                <h5 class="fw-bold">
+                    {{ listing.producer_name }}
+                </h5>
+
+                <hr class="border-secondary">
+
+                <ul class="list-unstyled text-light">
+                    <li class="mb-2">
+                        <i class="fas fa-map-marker-alt text-danger me-2"></i>
+                        {{ listing.address or 'Not specified' }}
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-truck text-danger me-2"></i>
+                        {{ listing.shipping_company or 'Not specified' }}
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-phone text-danger me-2"></i>
+                        {{ listing.phone or 'Hidden' }}
+                    </li>
+                </ul>
+
+                <div class="d-grid mt-3">
+                    <button class="btn btn-success" disabled>
+                        <i class="fab fa-whatsapp"></i> Contact Seller
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
